@@ -6,2100 +6,329 @@
     <title>رزومه - پوریا عابدی</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-
-        .button-sidebar {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .top-buttons {
-            display: none;
-        }
-
-        .btn-main {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            white-space: nowrap;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-main:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-edit-mode {
-            background: #2196F3;
-            color: white;
-        }
-
-        .btn-save-mode {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-preview {
-            background: #9C27B0;
-            color: white;
-        }
-
-        .btn-reset {
-            background: #757575;
-            color: white;
-            display: none;
-        }
-
-        .btn-reset.visible {
-            display: block;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .profile-image-wrapper {
-            position: relative;
-        }
-
-        .profile-image {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .image-upload {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: #ff6b6b;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 3px solid white;
-            font-size: 20px;
-            transition: background 0.3s;
-        }
-
-        .image-upload:hover {
-            background: #ff5252;
-        }
-
-        .image-upload input {
-            display: none;
-        }
-
-        .header-info {
-            flex: 1;
-        }
-
-        .header-info h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .header-info h1.edit-mode {
-            background: rgba(255, 235, 59, 0.2);
-            padding: 8px 12px;
-            border-radius: 4px;
-            border: 2px dashed #FFC107;
-        }
-
-        .header-info h1 input {
-            background: white;
-            color: #333;
-            border: 2px solid #FFC107;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 28px;
-            font-weight: 700;
-            width: 100%;
-            direction: rtl;
-        }
-
-        .header-info h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: 300;
-            color: #e0e0e0;
-        }
-
-        .header-info h2.edit-mode {
-            background: rgba(255, 235, 59, 0.2);
-            padding: 8px 12px;
-            border-radius: 4px;
-            border: 2px dashed #FFC107;
-        }
-
-        .header-info h2 input {
-            background: white;
-            color: #333;
-            border: 2px solid #FFC107;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 18px;
-            width: 100%;
-            direction: rtl;
-        }
-
-        .contact-info {
-            font-size: 13px;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-
-        .contact-info .info-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-        }
-
-        .info-icon {
-            margin-left: 8px;
-            color: #e0e0e0;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .editable-contact {
-            cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 3px;
-            transition: background 0.3s;
-            word-break: break-word;
-        }
-
-        .editable-contact:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .editable-contact input {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            border: 1px solid #FFC107;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 13px;
-            direction: rtl;
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        .section {
-            margin-bottom: 35px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1e3c72;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-actions {
-            display: none;
-            gap: 8px;
-        }
-
-        .section-actions.visible {
-            display: flex;
-        }
-
-        .btn-add {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .btn-add:hover {
-            background: #45a049;
-        }
-
-        .summary-text {
-            background: #f5f7fa;
-            padding: 15px;
-            border-right: 4px solid #667eea;
-            border-radius: 4px;
-            line-height: 1.8;
-            color: #333;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.3s;
-            word-wrap: break-word;
-            word-break: break-word;
-        }
-
-        .summary-text:hover {
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .summary-text.edit-mode {
-            background: rgba(255, 235, 59, 0.2);
-            border: 2px dashed #FFC107;
-        }
-
-        .job-item, .education-item, .additional-item {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 6px;
-            border-right: 4px solid #667eea;
-            position: relative;
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .item-actions {
-            display: none;
-            gap: 6px;
-        }
-
-        .item-actions.visible {
-            display: flex;
-        }
-
-        .btn-edit, .btn-delete {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 3px;
-            transition: background 0.3s;
-        }
-
-        .btn-edit {
-            color: #2196F3;
-        }
-
-        .btn-edit:hover {
-            background: rgba(33, 150, 243, 0.1);
-        }
-
-        .btn-delete {
-            color: #f44336;
-        }
-
-        .btn-delete:hover {
-            background: rgba(244, 67, 54, 0.1);
-        }
-
-        .job-title {
-            font-weight: 700;
-            color: #1e3c72;
-            font-size: 16px;
-        }
-
-        .job-company {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .job-date {
-            color: #999;
-            font-size: 13px;
-            font-style: italic;
-        }
-
-        .bullet-list {
-            list-style: none;
-            margin-top: 10px;
-            padding-right: 20px;
-        }
-
-        .bullet-list li {
-            color: #555;
-            font-size: 14px;
-            line-height: 1.8;
-            margin-bottom: 6px;
-            position: relative;
-            padding-right: 15px;
-            word-wrap: break-word;
-            word-break: break-word;
-        }
-
-        .bullet-list li:before {
-            content: "•";
-            color: #667eea;
-            font-weight: bold;
-            position: absolute;
-            right: 0;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-        }
-
-        .skill-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 500;
-        }
-
-        .badge-delete {
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            color: white;
-            cursor: pointer;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .badge-delete.visible {
-            display: flex;
-        }
-
-        .badge-delete:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .tools-section {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .tool-item {
-            background: #e3f2fd;
-            padding: 10px 12px;
-            border-radius: 4px;
-            color: #1976d2;
-            font-size: 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .tool-delete {
-            background: none;
-            border: none;
-            color: #1976d2;
-            cursor: pointer;
-            font-size: 16px;
-            display: none;
-            transition: transform 0.2s;
-        }
-
-        .tool-delete.visible {
-            display: block;
-        }
-
-        .tool-delete:hover {
-            transform: scale(1.2);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            direction: rtl;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-header {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #1e3c72;
-        }
-
-        .modal-close {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            background: none;
-            line-height: 1;
-        }
-
-        .modal-close:hover {
-            color: black;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-            direction: rtl;
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        .btn-submit, .btn-cancel {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .btn-submit {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-cancel {
-            background: #ccc;
-            color: #333;
-        }
-
-        .edit-mode {
-            background: rgba(255, 235, 59, 0.1);
-            border: 2px dashed #FFC107;
-        }
-
-        .edit-mode .section-title {
-            color: #F57F17;
-        }
-
-        .additional-info {
-            background: #f5f7fa;
-            padding: 15px;
-            border-radius: 6px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .info-box {
-            padding: 10px;
-            background: white;
-            border-radius: 4px;
-            border-right: 3px solid #667eea;
-            word-wrap: break-word;
-            word-break: break-word;
-            position: relative;
-        }
-
-        .info-box-label {
-            font-size: 12px;
-            color: #999;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .info-box-value {
-            font-size: 14px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .info-box-value.editable {
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 3px;
-            transition: background 0.3s;
-        }
-
-        .info-box-value.editable:hover {
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .info-box-delete {
-            position: absolute;
-            left: 5px;
-            top: 5px;
-            background: none;
-            border: none;
-            color: #f44336;
-            cursor: pointer;
-            font-size: 14px;
-            display: none;
-        }
-
-        .info-box-delete.visible {
-            display: block;
-        }
-
-        /* Preview Modal */
-        .preview-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            direction: rtl;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .preview-modal.active {
-            display: flex;
-        }
-
-        .preview-content {
-            background-color: white;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 1000px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .preview-header-bar {
-            position: sticky;
-            top: 0;
-            background: white;
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            align-items: center;
-            z-index: 2001;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .template-selector {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .template-btn {
-            padding: 8px 16px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 13px;
-        }
-
-        .template-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .template-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-download {
-            background: #4CAF50;
-            color: white;
-            padding: 10px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-            font-size: 14px;
-            margin: 0 5px;
-        }
-
-        .btn-download:hover {
-            background: #45a049;
-        }
-
-        .btn-download-html {
-            background: #FF9800;
-            color: white;
-            padding: 10px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-            font-size: 14px;
-            margin: 0 5px;
-        }
-
-        .btn-download-html:hover {
-            background: #F57C00;
-        }
-
-        .preview-close-btn {
-            background: #f44336;
-            color: white;
-            padding: 10px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-            font-size: 14px;
-        }
-
-        .preview-close-btn:hover {
-            background: #d32f2f;
-        }
-
-        .preview-body {
-            padding: 40px;
-            background: white;
-        }
-
-        /* Template Styles */
-        .template-preview {
-            line-height: 1.8;
-            word-wrap: break-word;
-            word-break: break-word;
-        }
-
-        .template-1 {
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .template-1 .preview-header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 20px;
-        }
-
-        .template-1 .preview-profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: block;
-            border: 3px solid #667eea;
-        }
-
-        .template-1 .preview-name {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1e3c72;
-            margin-bottom: 5px;
-        }
-
-        .template-1 .preview-title {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .template-1 .preview-contact {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .template-1 .preview-section {
-            margin-bottom: 20px;
-        }
-
-        .template-1 .preview-section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1e3c72;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
-        }
-
-        .template-1 .preview-item {
-            margin-bottom: 15px;
-        }
-
-        /* Template 2 - Minimal */
-        .template-2 {
-            font-family: 'Calibri', sans-serif;
-        }
-
-        .template-2 .preview-header {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            align-items: flex-start;
-        }
-
-        .template-2 .preview-profile-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2px solid #ccc;
-            flex-shrink: 0;
-        }
-
-        .template-2 .preview-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: #000;
-            margin-bottom: 3px;
-        }
-
-        .template-2 .preview-title {
-            font-size: 14px;
-            color: #333;
-        }
-
-        .template-2 .preview-contact {
-            font-size: 11px;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .template-2 .preview-section-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #000;
-            margin-top: 12px;
-            margin-bottom: 8px;
-        }
-
-        /* Template 3 - Professional */
-        .template-3 {
-            font-family: 'Times New Roman', serif;
-        }
-
-        .template-3 .preview-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .template-3 .preview-profile-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            margin: 15px auto;
-            display: block;
-            border: 2px solid #2c3e50;
-        }
-
-        .template-3 .preview-name {
-            font-size: 26px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
-        .template-3 .preview-title {
-            font-size: 13px;
-            color: #34495e;
-            font-style: italic;
-        }
-
-        .template-3 .preview-contact {
-            font-size: 11px;
-            color: #7f8c8d;
-            margin-top: 8px;
-        }
-
-        .template-3 .preview-section-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-top: 15px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Template 4 - Creative */
-        .template-4 {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(to bottom, #f8f9fa 0%, white 50%);
-            padding: 30px;
-        }
-
-        .template-4 .preview-header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 8px;
-        }
-
-        .template-4 .preview-profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: -50px auto 15px;
-            display: block;
-            border: 4px solid white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .template-4 .preview-name {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .template-4 .preview-title {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .template-4 .preview-contact {
-            font-size: 12px;
-            margin-top: 12px;
-            opacity: 0.8;
-        }
-
-        .template-4 .preview-section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #667eea;
-            margin-top: 20px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px dashed #667eea;
-        }
-
-        /* Template 5 - Modern Blue */
-        .template-5 {
-            font-family: 'Segoe UI', sans-serif;
-            background: white;
-        }
-
-        .template-5 .preview-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #1e3c72;
-        }
-
-        .template-5 .preview-profile-img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 4px solid #1e3c72;
-            flex-shrink: 0;
-        }
-
-        .template-5 .preview-header-info {
-            flex: 1;
-        }
-
-        .template-5 .preview-name {
-            font-size: 26px;
-            font-weight: 700;
-            color: #1e3c72;
-            margin-bottom: 5px;
-        }
-
-        .template-5 .preview-title {
-            font-size: 15px;
-            color: #667eea;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .template-5 .preview-contact {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .template-5 .preview-section-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: white;
-            background: #1e3c72;
-            padding: 10px 15px;
-            margin-top: 15px;
-            margin-bottom: 12px;
-            border-radius: 4px;
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .container {
-                box-shadow: none;
-                border-radius: 0;
-                max-width: 100%;
-            }
-
-            .button-sidebar {
-                display: none;
-            }
-
-            .section-actions {
-                display: none !important;
-            }
-
-            .item-actions {
-                display: none !important;
-            }
-
-            .image-upload {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .button-sidebar {
-                position: static;
-                flex-direction: row;
-                justify-content: center;
-                margin-bottom: 20px;
-                transform: none;
-                left: auto;
-                top: auto;
-            }
-
-            .header {
-                padding: 25px;
-            }
-
-            .profile-section {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .content {
-                padding: 20px;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tools-section {
-                grid-template-columns: 1fr;
-            }
-
-            .additional-info {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-main {
-                padding: 10px 20px;
-                font-size: 12px;
-            }
-        }
+        *{box-sizing:border-box}
+        body{font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:20px;min-height:100vh}
+        .container{max-width:900px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden}
+        .button-sidebar{position:fixed;left:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:100}
+        .btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:600;color:#fff}
+        .btn.edit{background:#2196F3}
+        .btn.save{background:#4CAF50}
+        .btn.preview{background:#9C27B0}
+        .btn.reset{background:#757575}
+        .header{background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:#fff;padding:36px;text-align:center}
+        .profile-row{display:flex;align-items:center;gap:20px;justify-content:center;flex-wrap:wrap}
+        .profile-img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid #fff}
+        .header-info h1{font-size:28px;margin-bottom:6px}
+        .header-info h2{font-size:16px;margin-bottom:8px;font-weight:300;color:#e0e0e0}
+        .contact{font-size:13px;color:#f0f0f0}
+        .content{padding:30px}
+        .section{margin-bottom:24px}
+        .section h3{font-size:18px;color:#1e3c72;margin-bottom:10px}
+        .summary{text-align:right;background:#f5f7fa;padding:12px;border-radius:6px;border-right:4px solid #667eea;color:#333}
+        .job-item{background:#f9f9f9;padding:12px;border-radius:6px;border-right:4px solid #667eea;margin-bottom:12px}
+        ul{Padding-right:18px}
+        li{margin-bottom:6px}
+        .editable{outline-offset:4px}
+        .editing .editable{outline:2px dashed #FFC107;background:rgba(255,235,59,.08)}
+        .top-actions{display:flex;gap:8px;justify-content:center;padding:12px;border-bottom:1px solid #eee}
+        .preview-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center;z-index:2000}
+        .preview-modal.active{display:flex}
+        .preview-sheet{background:#fff;width:90%;max-width:1000px;border-radius:12px;overflow:auto}
+        .preview-body{padding:24px}
+        .small-muted{color:#666;font-size:13px}
+        .inline-edit-hint{font-size:12px;color:#fff;opacity:.9}
     </style>
 </head>
 <body>
-    <div class="button-sidebar">
-        <button class="btn-main btn-edit-mode" onclick="toggleEditMode()" title="ویرایش رزومه">✏️ ویرایش</button>
-        <button class="btn-main btn-save-mode" id="saveBtn" style="display: none;" onclick="toggleEditMode()" title="ذخیره تغییرات">💾 ذخیره</button>
-        <button class="btn-main btn-preview" onclick="openPreview()" title="نمایش پیش‌نمایش">👁️ نمایش</button>
-        <button class="btn-main btn-reset" id="resetBtn" onclick="resetData()" title="بازنشانی تمام تغییرات">🔄 بازنشانی</button>
-    </div>
+<div class="button-sidebar">
+    <button class="btn edit" id="toggleEditBtn">حالت ویرایش</button>
+    <button class="btn save" id="saveBtn">دانلود HTML</button>
+    <button class="btn preview" id="previewBtn">پیش‌نمایش / چاپ</button>
+    <button class="btn reset" id="resetBtn">بازنشانی</button>
+</div>
 
-    <div class="container">
-        <div class="header">
-            <div class="profile-section">
-                <div class="profile-image-wrapper">
-                    <img id="profileImage" class="profile-image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="پروفایل">
-                    <label class="image-upload" title="آپلود عکس">
-                        📷
-                        <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(event)">
-                    </label>
-                </div>
-                <div class="header-info">
-                    <h1 id="fullName" onclick="editHeaderField(this)">پوریا عابدی</h1>
-                    <h2 id="jobTitle" onclick="editHeaderField(this)">Senior Instrument Technician | Oil & Gas Operations</h2>
-                    <div class="contact-info">
-                        <div class="info-item">
-                            <span class="info-icon">📍</span>
-                            <span class="editable-contact" onclick="editContact(this)">مهران، ایلام</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-icon">📞</span>
-                            <span class="editable-contact" onclick="editContact(this)">09184205814</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-icon">📧</span>
-                            <span class="editable-contact" onclick="editContact(this)">porya@example.com</span>
-                        </div>
-                    </div>
+<div class="container" id="resumeContainer">
+    <header class="header">
+        <div class="profile-row">
+            <div>
+                <img src="" alt="profile" class="profile-img" id="profileImg">
+                <div style="margin-top:8px;text-align:center">
+                    <label for="imgInput" style="cursor:pointer;background:#ff6b6b;padding:6px 10px;border-radius:6px;color:#fff;font-weight:700">بارگذاری عکس</label>
+                    <input type="file" id="imgInput" accept="image/*" style="display:none">
                 </div>
             </div>
-        </div>
-
-        <div class="content">
-            <!-- خلاصه حرفه‌ای -->
-            <div class="section">
-                <div class="section-title">
-                    خلاصه حرفه‌ای
-                    <div class="section-actions" id="summaryActions">
-                        <button class="btn-add" onclick="editSummary()">ویرایش</button>
-                    </div>
-                </div>
-                <div id="summaryContainer" class="summary-text">
-                    تکنسین ارشد ابزار دقیق با تجربه در صنعت بهره‌برداری نفت و نگهداری تجهیزات ابزار دقیق و سیستم‌های ایمنی فرآیندی. دارای تجربه عملی در اجرای PM و CM، کالیبراسیون، Loop Check، Functional Test و عیب‌یابی تجهیزات فیلد در میدان نفتی آذر. آشنا با تجهیزات سرچاهی، سیستم‌های Fire & Gas، HIPPS، Control Valve و Shutdown Valve و متعهد به رعایت الزامات HSE و Permit To Work.
-                </div>
-            </div>
-
-            <!-- سوابق شغلی -->
-            <div class="section">
-                <div class="section-title">
-                    سوابق شغلی
-                    <div class="section-actions" id="jobActions">
-                        <button class="btn-add" onclick="openJobModal()">افزودن</button>
-                    </div>
-                </div>
-                <div id="jobContainer">
-                    <div class="job-item">
-                        <div class="item-header">
-                            <div>
-                                <div class="job-title">تکنسین ارشد ابزار دقیق</div>
-                                <div class="job-company">شرکت راه‌اندازی و بهره‌برداری صنایع نفت (OICO)</div>
-                                <div class="job-date">بهمن 1402 - تاکنون</div>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-edit" onclick="editJob(this)">✏️</button>
-                                <button class="btn-delete" onclick="deleteJob(this)">🗑️</button>
-                            </div>
-                        </div>
-                        <ul class="bullet-list">
-                            <li>اجرای برنامه‌های تعمیرات پیشگیرانه (PM) و تعمیرات اصلاحی (CM)</li>
-                            <li>کالیبراسیون و صحت‌سنجی تجهیزات ابزار دقیق فیلد</li>
-                            <li>انجام Loop Check و Functional Test تجهیزات فرآیندی و ایمنی</li>
-                            <li>عیب‌یابی و رفع اشکال تجهیزات ابزار دقیق و سیستم‌های ایمنی</li>
-                            <li>نصب، راه‌اندازی و تعویض تجهیزات ابزار دقیق</li>
-                            <li>همکاری با واحد بهره‌برداری و سیستم کنترل در رفع مشکلات عملیاتی</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- تحصیلات -->
-            <div class="section">
-                <div class="section-title">
-                    تحصیلات
-                    <div class="section-actions" id="eduActions">
-                        <button class="btn-add" onclick="openEducationModal()">افزودن</button>
-                    </div>
-                </div>
-                <div id="educationContainer">
-                    <div class="education-item">
-                        <div class="item-header">
-                            <div>
-                                <div class="job-title">کارشناسی مهندسی برق قدرت</div>
-                                <div class="job-company">مؤسسه آموزش عالی رشدیه تبریز</div>
-                                <div class="job-date">معدل: 17.79</div>
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn-edit" onclick="editEducation(this)">✏️</button>
-                                <button class="btn-delete" onclick="deleteEducation(this)">🗑️</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- مهارت‌های تخصصی -->
-            <div class="section">
-                <div class="section-title">
-                    مهارت‌های تخصصی
-                    <div class="section-actions" id="skillActions">
-                        <button class="btn-add" onclick="openSkillModal()">افزودن</button>
-                    </div>
-                </div>
-                <div class="skills-grid" id="skillsContainer">
-                    <div class="skill-badge">Preventive Maintenance (PM)<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                    <div class="skill-badge">Corrective Maintenance (CM)<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                    <div class="skill-badge">Calibration<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                    <div class="skill-badge">Loop Check<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                    <div class="skill-badge">Functional Testing<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                    <div class="skill-badge">Troubleshooting<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                    <div class="skill-badge">Instrument Installation<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                    <div class="skill-badge">Permit To Work (PTW)<button class="badge-delete" onclick="deleteSkill(this)">✕</button></div>
-                </div>
-            </div>
-
-            <!-- تجهیزات و برندها -->
-            <div class="section">
-                <div class="section-title">
-                    تجهیزات و برندها
-                    <div class="section-actions" id="toolActions">
-                        <button class="btn-add" onclick="openToolModal()">افزودن</button>
-                    </div>
-                </div>
-                <div class="tools-section" id="toolsContainer">
-                    <div class="tool-item">HART Communicator 475<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                    <div class="tool-item">mA Source<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                    <div class="tool-item">Manual Pressure Pump<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                    <div class="tool-item">Emerson<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                    <div class="tool-item">Rosemount<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                    <div class="tool-item">Yokogawa<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                    <div class="tool-item">ABB<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                    <div class="tool-item">Honeywell<button class="tool-delete" onclick="deleteTool(this)">✕</button></div>
-                </div>
-            </div>
-
-            <!-- اطلاعات تکمیلی -->
-            <div class="section">
-                <div class="section-title">
-                    اطلاعات تکمیلی
-                    <div class="section-actions" id="additionalActions">
-                        <button class="btn-add" onclick="openAdditionalModal()">افزودن</button>
-                    </div>
-                </div>
-                <div class="additional-info" id="additionalContainer">
-                    <div class="info-box">
-                        <div class="info-box-label">وضعیت تأهل</div>
-                        <div class="info-box-value editable" onclick="editAdditionalInfo(this)">متأهل</div>
-                        <button class="info-box-delete" onclick="deleteAdditionalInfo(this)">🗑️</button>
-                    </div>
-                    <div class="info-box">
-                        <div class="info-box-label">وضعیت نظام وظیفه</div>
-                        <div class="info-box-value editable" onclick="editAdditionalInfo(this)">پایان خدمت</div>
-                        <button class="info-box-delete" onclick="deleteAdditionalInfo(this)">🗑️</button>
-                    </div>
-                    <div class="info-box">
-                        <div class="info-box-label">گواهینامه رانندگی</div>
-                        <div class="info-box-value editable" onclick="editAdditionalInfo(this)">پایه دوم</div>
-                        <button class="info-box-delete" onclick="deleteAdditionalInfo(this)">🗑️</button>
-                    </div>
-                    <div class="info-box">
-                        <div class="info-box-label">زبان انگلیسی</div>
-                        <div class="info-box-value editable" onclick="editAdditionalInfo(this)">مقدماتی (در حال ارتقاء)</div>
-                        <button class="info-box-delete" onclick="deleteAdditionalInfo(this)">🗑️</button>
-                    </div>
-                    <div class="info-box">
-                        <div class="info-box-label">دوره‌های تخصصی</div>
-                        <div class="info-box-value editable" onclick="editAdditionalInfo(this)">Industrial PLC Training (120 Hours), HIMA Training (32 Hours), Instrumentation & Control Engineering, General Instrument Calibration, Permit To Work (PTW)</div>
-                        <button class="info-box-delete" onclick="deleteAdditionalInfo(this)">🗑️</button>
-                    </div>
-                </div>
+            <div class="header-info">
+                <h1 class="editable" id="fullName" contenteditable="false">پوریا عابدی</h1>
+                <h2 class="editable" id="jobTitle" contenteditable="false">Senior Instrument Technician | Oil &amp; Gas Operations</h2>
+                <div class="contact editable" id="contactLine" contenteditable="false">📍 مهران، ایلام | 📞 09184205814 | 📧 pouriaabedi0073@gmail.com</div>
             </div>
         </div>
-    </div>
-
-    <!-- Modal for Job -->
-    <div id="jobModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeJobModal()">×</button>
-            <div class="modal-header">افزودن/ویرایش تجربه شغلی</div>
-            <form id="jobForm" onsubmit="saveJob(event)">
-                <div class="form-group">
-                    <label>عنوان شغلی</label>
-                    <input type="text" id="jobTitleInput" required>
-                </div>
-                <div class="form-group">
-                    <label>نام شرکت</label>
-                    <input type="text" id="jobCompanyInput" required>
-                </div>
-                <div class="form-group">
-                    <label>تاریخ شروع</label>
-                    <input type="text" id="jobStartInput" placeholder="مثال: بهمن 1402">
-                </div>
-                <div class="form-group">
-                    <label>تاریخ پایان</label>
-                    <input type="text" id="jobEndInput" placeholder="مثال: تاکنون">
-                </div>
-                <div class="form-group">
-                    <label>توضیحات (هر خط یک مورد)</label>
-                    <textarea id="jobDescInput"></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">ذخیره</button>
-                    <button type="button" class="btn-cancel" onclick="closeJobModal()">لغو</button>
-                </div>
-            </form>
+        <div class="top-actions" style="margin-top:12px">
+            <div class="inline-edit-hint">برای ویرایش روی متن کلیک کرده و سپس <strong>حالت ویرایش</strong> را فعال کنید.</div>
         </div>
-    </div>
+    </header>
 
-    <!-- Modal for Education -->
-    <div id="educationModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeEducationModal()">×</button>
-            <div class="modal-header">افزودن/ویرایش تحصیل</div>
-            <form id="educationForm" onsubmit="saveEducation(event)">
-                <div class="form-group">
-                    <label>مدرک تحصیلی</label>
-                    <input type="text" id="eduDegreeInput" required>
-                </div>
-                <div class="form-group">
-                    <label>نام دانشگاه/مؤسسه</label>
-                    <input type="text" id="eduUniversityInput" required>
-                </div>
-                <div class="form-group">
-                    <label>معلومات اضافی</label>
-                    <input type="text" id="eduExtraInput" placeholder="مثال: معدل: 17.79">
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">ذخیره</button>
-                    <button type="button" class="btn-cancel" onclick="closeEducationModal()">لغو</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal for Skill -->
-    <div id="skillModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeSkillModal()">×</button>
-            <div class="modal-header">افزودن مهارت</div>
-            <form id="skillForm" onsubmit="saveSkill(event)">
-                <div class="form-group">
-                    <label>نام مهارت</label>
-                    <input type="text" id="skillInput" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">افزودن</button>
-                    <button type="button" class="btn-cancel" onclick="closeSkillModal()">لغو</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal for Tool -->
-    <div id="toolModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeToolModal()">×</button>
-            <div class="modal-header">افزودن تجهیز/برند</div>
-            <form id="toolForm" onsubmit="saveTool(event)">
-                <div class="form-group">
-                    <label>نام تجهیز/برند</label>
-                    <input type="text" id="toolInput" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">افزودن</button>
-                    <button type="button" class="btn-cancel" onclick="closeToolModal()">لغو</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal for Additional Info -->
-    <div id="additionalModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeAdditionalModal()">×</button>
-            <div class="modal-header">افزودن اطلاعات تکمیلی</div>
-            <form id="additionalForm" onsubmit="saveAdditional(event)">
-                <div class="form-group">
-                    <label>عنوان</label>
-                    <input type="text" id="additionalLabelInput" placeholder="مثال: زبان ها، گواهینامه ها" required>
-                </div>
-                <div class="form-group">
-                    <label>توضیحات</label>
-                    <textarea id="additionalValueInput" required></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">ذخیره</button>
-                    <button type="button" class="btn-cancel" onclick="closeAdditionalModal()">لغو</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Preview Modal -->
-    <div id="previewModal" class="preview-modal">
-        <div class="preview-content">
-            <div class="preview-header-bar">
-                <div class="template-selector">
-                    <span>الگو:</span>
-                    <button class="template-btn active" onclick="switchTemplate(1)">الگو ۱</button>
-                    <button class="template-btn" onclick="switchTemplate(2)">الگو ۲</button>
-                    <button class="template-btn" onclick="switchTemplate(3)">الگو ۳</button>
-                    <button class="template-btn" onclick="switchTemplate(4)">الگو ۴</button>
-                    <button class="template-btn" onclick="switchTemplate(5)">الگو ۵</button>
-                </div>
-                <button class="btn-download" onclick="downloadPDF()">📥 دانلود PDF</button>
-                <button class="btn-download-html" onclick="downloadHTML()">📥 دانلود HTML</button>
-                <button class="preview-close-btn" onclick="closePreview()">بستن</button>
+    <main class="content" id="contentArea">
+        <section class="section">
+            <h3 class="editable" id="sectionSummaryTitle" contenteditable="false">خلاصه حرفه‌ای</h3>
+            <div class="summary editable" id="summaryText" contenteditable="false">
+                تکنسین ارشد ابزار دقیق با تجربه در صنعت بهره‌برداری نفت و نگهداری تجهیزات ابزار دقیق و سیستم‌های ایمنی فرآیندی. دارای تجربه عملی در اجرای PM و CM، کالیبراسیون، Loop Check، Functional Test و عیب‌یابی تجهیزات فیلد در میدان نفتی آذر. آشنا با تجهیزات سرچاهی، سیستم‌های Fire &amp; Gas، HIPPS، Control Valve و Shutdown Valve و متعهد به رعایت الزامات HSE و Permit To Work.
             </div>
-            <div class="preview-body" id="previewBody"></div>
-        </div>
-    </div>
+        </section>
 
-    <script>
-        let isEditMode = false;
-        let currentTemplate = 1;
-        let profileImageData = null;
+        <hr>
 
-        function loadData() {
-            const data = localStorage.getItem('resumeData');
-            if (data) {
-                const parsed = JSON.parse(data);
-                if (parsed.profileImage) {
-                    document.getElementById('profileImage').src = parsed.profileImage;
-                    profileImageData = parsed.profileImage;
-                }
-            }
-        }
+        <section class="section">
+            <h3 class="editable" id="sectionWorkTitle" contenteditable="false">سوابق شغلی</h3>
 
-        function saveData() {
-            const data = {
-                profileImage: profileImageData
-            };
-            localStorage.setItem('resumeData', JSON.stringify(data));
-        }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileImageData = e.target.result;
-                    document.getElementById('profileImage').src = e.target.result;
-                    saveData();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const editBtn = document.querySelector('.btn-edit-mode');
-            const saveBtn = document.querySelector('.btn-save-mode');
-            const resetBtn = document.getElementById('resetBtn');
-            const container = document.querySelector('.container');
-
-            if (isEditMode) {
-                editBtn.style.display = 'none';
-                saveBtn.style.display = 'block';
-                resetBtn.classList.add('visible');
-                container.classList.add('edit-mode');
-                
-                document.getElementById('summaryActions').classList.add('visible');
-                document.getElementById('jobActions').classList.add('visible');
-                document.getElementById('eduActions').classList.add('visible');
-                document.getElementById('skillActions').classList.add('visible');
-                document.getElementById('toolActions').classList.add('visible');
-                document.getElementById('additionalActions').classList.add('visible');
-
-                document.querySelectorAll('.item-actions').forEach(el => el.classList.add('visible'));
-                document.querySelectorAll('.badge-delete').forEach(el => el.classList.add('visible'));
-                document.querySelectorAll('.tool-delete').forEach(el => el.classList.add('visible'));
-                document.querySelectorAll('.info-box-delete').forEach(el => el.classList.add('visible'));
-            } else {
-                editBtn.style.display = 'block';
-                saveBtn.style.display = 'none';
-                resetBtn.classList.remove('visible');
-                container.classList.remove('edit-mode');
-
-                document.getElementById('summaryActions').classList.remove('visible');
-                document.getElementById('jobActions').classList.remove('visible');
-                document.getElementById('eduActions').classList.remove('visible');
-                document.getElementById('skillActions').classList.remove('visible');
-                document.getElementById('toolActions').classList.remove('visible');
-                document.getElementById('additionalActions').classList.remove('visible');
-
-                document.querySelectorAll('.item-actions').forEach(el => el.classList.remove('visible'));
-                document.querySelectorAll('.badge-delete').forEach(el => el.classList.remove('visible'));
-                document.querySelectorAll('.tool-delete').forEach(el => el.classList.remove('visible'));
-                document.querySelectorAll('.info-box-delete').forEach(el => el.classList.remove('visible'));
-
-                saveData();
-            }
-        }
-
-        function editHeaderField(element) {
-            if (!isEditMode) return;
-            const currentText = element.textContent;
-            const tag = element.tagName;
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentText;
-            input.onblur = function() {
-                element.textContent = input.value || currentText;
-                element.classList.remove('edit-mode');
-            };
-            element.innerHTML = '';
-            element.appendChild(input);
-            element.classList.add('edit-mode');
-            input.focus();
-        }
-
-        function editContact(element) {
-            if (!isEditMode) return;
-            const currentText = element.textContent;
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentText;
-            input.onblur = function() {
-                element.textContent = input.value || currentText;
-            };
-            element.innerHTML = '';
-            element.appendChild(input);
-            input.focus();
-        }
-
-        function editSummary() {
-            const summary = document.getElementById('summaryContainer');
-            const currentText = summary.textContent;
-            summary.innerHTML = `<textarea style="width: 100%; min-height: 100px; padding: 10px; border: 2px solid #FFC107; border-radius: 4px; font-family: inherit;" onblur="saveSummary(this)">${currentText}</textarea>`;
-            summary.querySelector('textarea').focus();
-        }
-
-        function saveSummary(textarea) {
-            document.getElementById('summaryContainer').textContent = textarea.value;
-        }
-
-        function openJobModal() {
-            document.getElementById('jobForm').reset();
-            document.getElementById('jobModal').classList.add('active');
-        }
-
-        function closeJobModal() {
-            document.getElementById('jobModal').classList.remove('active');
-        }
-
-        function saveJob(event) {
-            event.preventDefault();
-            const title = document.getElementById('jobTitleInput').value;
-            const company = document.getElementById('jobCompanyInput').value;
-            const start = document.getElementById('jobStartInput').value;
-            const end = document.getElementById('jobEndInput').value;
-            const desc = document.getElementById('jobDescInput').value;
-
-            const descriptions = desc.split('\n').filter(d => d.trim());
-            const liItems = descriptions.map(d => `<li>${d}</li>`).join('');
-
-            const jobHTML = `
-                <div class="job-item">
-                    <div class="item-header">
-                        <div>
-                            <div class="job-title">${title}</div>
-                            <div class="job-company">${company}</div>
-                            <div class="job-date">${start} - ${end}</div>
-                        </div>
-                        <div class="item-actions visible">
-                            <button class="btn-edit" onclick="editJob(this)">✏️</button>
-                            <button class="btn-delete" onclick="deleteJob(this)">🗑️</button>
-                        </div>
+            <div class="job-item">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <div>
+                        <div class="job-role editable" id="jobRole1" contenteditable="false">تکنسین ارشد ابزار دقیق</div>
+                        <div class="job-company editable" id="jobCompany1" contenteditable="false"><strong>شرکت راه‌اندازی و بهره‌برداری صنایع نفت (OICO)</strong></div>
                     </div>
-                    <ul class="bullet-list">
-                        ${liItems}
-                    </ul>
+                    <div class="job-date editable small-muted" id="jobDate1" contenteditable="false">بهمن 1402 تاکنون</div>
                 </div>
-            `;
+                <ul class="bullet-list editable" id="jobDesc1" contenteditable="false">
+                    <li>اجرای برنامه‌های تعمیرات پیشگیرانه (PM) و تعمیرات اصلاحی (CM)</li>
+                    <li>کالیبراسیون و صحت‌سنجی تجهیزات ابزار دقیق فیلد</li>
+                    <li>انجام Loop Check و Functional Test تجهیزات فرآیندی و ایمنی</li>
+                    <li>عیب‌یابی و رفع اشکال تجهیزات ابزار دقیق و سیستم‌های ایمنی</li>
+                    <li>نصب، راه‌اندازی و تعویض تجهیزات ابزار دقیق</li>
+                    <li>همکاری با واحد بهره‌برداری و سیستم کنترل در رفع مشکلات عملیاتی</li>
+                    <li>فعالیت در مرکز بهره‌برداری و تأسیسات سرچاهی میدان نفتی آذر</li>
+                </ul>
+            </div>
+        </section>
 
-            document.getElementById('jobContainer').innerHTML += jobHTML;
-            closeJobModal();
-        }
+        <section class="section">
+            <h3 class="editable" id="sectionEquipTitle" contenteditable="false">تجهیزات و سیستم‌های تحت پوشش</h3>
+            <ul class="editable" id="equipList" contenteditable="false">
+                <li>Pressure, Temperature, Level &amp; Flow Transmitters</li>
+                <li>Wellhead HPU Panels</li>
+                <li>Burner &amp; Pilot Feedback Scanners</li>
+            </ul>
 
-        function editJob(btn) {
-            const item = btn.closest('.job-item');
-            const title = item.querySelector('.job-title').textContent;
-            const company = item.querySelector('.job-company').textContent;
-            const date = item.querySelector('.job-date').textContent;
-            const [start, end] = date.split(' - ');
-            const descriptions = Array.from(item.querySelectorAll('.bullet-list li')).map(li => li.textContent).join('\n');
+            <h4 class="editable" id="valvesTitle" contenteditable="false">Valves &amp; Actuators</h4>
+            <ul class="editable" id="valvesList" contenteditable="false">
+                <li>Control Valves</li>
+                <li>SDV</li>
+                <li>ESDV</li>
+                <li>LBV</li>
+            </ul>
 
-            document.getElementById('jobTitleInput').value = title;
-            document.getElementById('jobCompanyInput').value = company;
-            document.getElementById('jobStartInput').value = start;
-            document.getElementById('jobEndInput').value = end;
-            document.getElementById('jobDescInput').value = descriptions;
+            <h4 class="editable" id="safetyTitle" contenteditable="false">Safety Systems</h4>
+            <ul class="editable" id="safetyList" contenteditable="false">
+                <li>HIPPS</li>
+                <li>Fire &amp; Gas Systems (F&amp;G)</li>
+                <li>CO₂ Fire Suppression Systems</li>
+            </ul>
+        </section>
 
-            item.remove();
-            document.getElementById('jobModal').classList.add('active');
-        }
+        <section class="section">
+            <h3 class="editable" id="sectionSkillsTitle" contenteditable="false">مهارت‌های تخصصی</h3>
+            <ul class="editable" id="skillsList" contenteditable="false">
+                <li>Preventive Maintenance (PM)</li>
+                <li>Corrective Maintenance (CM)</li>
+                <li>Calibration</li>
+                <li>Loop Check</li>
+                <li>Functional Testing</li>
+                <li>Troubleshooting</li>
+                <li>Instrument Installation</li>
+                <li>Permit To Work (PTW)</li>
+            </ul>
 
-        function deleteJob(btn) {
-            btn.closest('.job-item').remove();
-        }
+            <h4 class="editable" id="calibTitle" contenteditable="false">ابزارهای کالیبراسیون</h4>
+            <ul class="editable" id="calibList" contenteditable="false">
+                <li>HART Communicator 475</li>
+                <li>mA Source</li>
+                <li>Manual Pressure Pump</li>
+            </ul>
 
-        function openEducationModal() {
-            document.getElementById('educationForm').reset();
-            document.getElementById('educationModal').classList.add('active');
-        }
+            <h4 class="editable" id="brandsTitle" contenteditable="false">برندهای تجهیزات</h4>
+            <ul class="editable" id="brandsList" contenteditable="false">
+                <li>Emerson</li>
+                <li>Rosemount</li>
+                <li>Yokogawa</li>
+                <li>ABB</li>
+                <li>Honeywell</li>
+                <li>Siemens</li>
+                <li>Endress+Hauser</li>
+            </ul>
+        </section>
 
-        function closeEducationModal() {
-            document.getElementById('educationModal').classList.remove('active');
-        }
+        <section class="section">
+            <h3 class="editable" id="sectionEduTitle" contenteditable="false">تحصیلات</h3>
+            <div class="education-item job-item">
+                <div class="editable" id="degree" contenteditable="false"><strong>کارشناسی مهندسی برق قدرت</strong></div>
+                <div class="editable small-muted" id="university" contenteditable="false">مؤسسه آموزش عالی رشدیه تبریز</div>
+                <div class="editable small-muted" id="gpa" contenteditable="false">معدل: 17.79</div>
+            </div>
+        </section>
 
-        function saveEducation(event) {
-            event.preventDefault();
-            const degree = document.getElementById('eduDegreeInput').value;
-            const university = document.getElementById('eduUniversityInput').value;
-            const extra = document.getElementById('eduExtraInput').value;
+        <section class="section">
+            <h3 class="editable" id="sectionCoursesTitle" contenteditable="false">دوره‌های تخصصی</h3>
+            <ul class="editable" id="coursesList" contenteditable="false">
+                <li>Industrial PLC Training (120 Hours)</li>
+                <li>HIMA Training (32 Hours)</li>
+                <li>Instrumentation &amp; Control Engineering</li>
+                <li>General Instrument Calibration</li>
+                <li>Permit To Work (PTW)</li>
+            </ul>
+        </section>
 
-            const eduHTML = `
-                <div class="education-item">
-                    <div class="item-header">
-                        <div>
-                            <div class="job-title">${degree}</div>
-                            <div class="job-company">${university}</div>
-                            <div class="job-date">${extra}</div>
-                        </div>
-                        <div class="item-actions visible">
-                            <button class="btn-edit" onclick="editEducation(this)">✏️</button>
-                            <button class="btn-delete" onclick="deleteEducation(this)">🗑️</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('educationContainer').innerHTML += eduHTML;
-            closeEducationModal();
-        }
-
-        function editEducation(btn) {
-            const item = btn.closest('.education-item');
-            const degree = item.querySelector('.job-title').textContent;
-            const university = item.querySelector('.job-company').textContent;
-            const extra = item.querySelector('.job-date').textContent;
-
-            document.getElementById('eduDegreeInput').value = degree;
-            document.getElementById('eduUniversityInput').value = university;
-            document.getElementById('eduExtraInput').value = extra;
-
-            item.remove();
-            document.getElementById('educationModal').classList.add('active');
-        }
-
-        function deleteEducation(btn) {
-            btn.closest('.education-item').remove();
-        }
-
-        function openSkillModal() {
-            document.getElementById('skillForm').reset();
-            document.getElementById('skillModal').classList.add('active');
-        }
-
-        function closeSkillModal() {
-            document.getElementById('skillModal').classList.remove('active');
-        }
-
-        function saveSkill(event) {
-            event.preventDefault();
-            const skill = document.getElementById('skillInput').value;
-            const skillHTML = `
-                <div class="skill-badge">
-                    ${skill}
-                    <button class="badge-delete visible" onclick="deleteSkill(this)">✕</button>
-                </div>
-            `;
-            document.getElementById('skillsContainer').innerHTML += skillHTML;
-            closeSkillModal();
-        }
-
-        function deleteSkill(btn) {
-            btn.closest('.skill-badge').remove();
-        }
-
-        function openToolModal() {
-            document.getElementById('toolForm').reset();
-            document.getElementById('toolModal').classList.add('active');
-        }
-
-        function closeToolModal() {
-            document.getElementById('toolModal').classList.remove('active');
-        }
-
-        function saveTool(event) {
-            event.preventDefault();
-            const tool = document.getElementById('toolInput').value;
-            const toolHTML = `
-                <div class="tool-item">
-                    ${tool}
-                    <button class="tool-delete visible" onclick="deleteTool(this)">✕</button>
-                </div>
-            `;
-            document.getElementById('toolsContainer').innerHTML += toolHTML;
-            closeToolModal();
-        }
-
-        function deleteTool(btn) {
-            btn.closest('.tool-item').remove();
-        }
-
-        function openAdditionalModal() {
-            document.getElementById('additionalForm').reset();
-            document.getElementById('additionalModal').classList.add('active');
-        }
-
-        function closeAdditionalModal() {
-            document.getElementById('additionalModal').classList.remove('active');
-        }
-
-        function saveAdditional(event) {
-            event.preventDefault();
-            const label = document.getElementById('additionalLabelInput').value;
-            const value = document.getElementById('additionalValueInput').value;
-
-            const boxHTML = `
+        <section class="section">
+            <h3 class="editable" id="sectionExtraTitle" contenteditable="false">اطلاعات تکمیلی</h3>
+            <div class="additional-info editable" id="extraInfo" contenteditable="false">
                 <div class="info-box">
-                    <div class="info-box-label">${label}</div>
-                    <div class="info-box-value editable" onclick="editAdditionalInfo(this)">${value}</div>
-                    <button class="info-box-delete visible" onclick="deleteAdditionalInfo(this)">🗑️</button>
+                    <div class="info-box-label">وضعیت تأهل</div>
+                    <div class="info-box-value editable" contenteditable="false">متأهل</div>
                 </div>
-            `;
+                <div class="info-box">
+                    <div class="info-box-label">وضعیت نظام وظیفه</div>
+                    <div class="info-box-value editable" contenteditable="false">پایان خدمت</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-box-label">گواهینامه رانندگی</div>
+                    <div class="info-box-value editable" contenteditable="false">پایه دوم</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-box-label">زبان انگلیسی</div>
+                    <div class="info-box-value editable" contenteditable="false">مقدماتی (در حال ارتقاء)</div>
+                </div>
+            </div>
+        </section>
 
-            document.getElementById('additionalContainer').innerHTML += boxHTML;
-            closeAdditionalModal();
-        }
+    </main>
+</div>
 
-        function editAdditionalInfo(element) {
-            if (!isEditMode) return;
-            const currentText = element.textContent;
-            element.innerHTML = `<input type="text" value="${currentText}" onblur="finishAdditionalEdit(this)">`;
-            element.querySelector('input').focus();
-        }
-
-        function finishAdditionalEdit(input) {
-            input.parentElement.textContent = input.value;
-        }
-
-        function deleteAdditionalInfo(btn) {
-            btn.closest('.info-box').remove();
-        }
-
-        function resetData() {
-            if (confirm('آیا مطمئن هستید؟ تمام تغییرات حذف خواهند شد')) {
-                localStorage.removeItem('resumeData');
-                location.reload();
-            }
-        }
-
-        function openPreview() {
-            generatePreview();
-            document.getElementById('previewModal').classList.add('active');
-        }
-
-        function closePreview() {
-            document.getElementById('previewModal').classList.remove('active');
-        }
-
-        function switchTemplate(num) {
-            currentTemplate = num;
-            document.querySelectorAll('.template-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            generatePreview();
-        }
-
-        function generatePreview() {
-            const previewBody = document.getElementById('previewBody');
-            const name = document.getElementById('fullName').textContent;
-            const title = document.getElementById('jobTitle').textContent;
-            const location = document.querySelectorAll('.editable-contact')[0].textContent;
-            const phone = document.querySelectorAll('.editable-contact')[1].textContent;
-            const email = document.querySelectorAll('.editable-contact')[2].textContent;
-            const summary = document.getElementById('summaryContainer').textContent;
-            const profileImg = document.getElementById('profileImage').src;
-
-            const jobs = getJobsHTML();
-            const education = getEducationHTML();
-            const skills = getSkillsHTML();
-            const tools = getToolsHTML();
-            const additional = getAdditionalHTML();
-
-            let content = '';
-            if (currentTemplate === 1) {
-                content = `
-                    <div class="template-1 template-preview">
-                        <div class="preview-header">
-                            <img class="preview-profile-img" src="${profileImg}" alt="پروفایل">
-                            <div class="preview-name">${name}</div>
-                            <div class="preview-title">${title}</div>
-                            <div class="preview-contact">${location} | ${phone} | ${email}</div>
-                        </div>
-                        <div class="preview-section">
-                            <div class="preview-section-title">خلاصه حرفه‌ای</div>
-                            <div class="preview-item">${summary}</div>
-                        </div>
-                        <div class="preview-section">
-                            <div class="preview-section-title">سوابق شغلی</div>
-                            ${jobs}
-                        </div>
-                        <div class="preview-section">
-                            <div class="preview-section-title">تحصیلات</div>
-                            ${education}
-                        </div>
-                        <div class="preview-section">
-                            <div class="preview-section-title">مهارت‌های تخصصی</div>
-                            ${skills}
-                        </div>
-                        <div class="preview-section">
-                            <div class="preview-section-title">تجهیزات و برندها</div>
-                            ${tools}
-                        </div>
-                        ${additional ? `<div class="preview-section"><div class="preview-section-title">اطلاعات تکمیلی</div>${additional}</div>` : ''}
-                    </div>
-                `;
-            } else if (currentTemplate === 2) {
-                content = `
-                    <div class="template-2 template-preview">
-                        <div class="preview-header">
-                            <img class="preview-profile-img" src="${profileImg}" alt="پروفایل">
-                            <div>
-                                <div class="preview-name">${name}</div>
-                                <div class="preview-title">${title}</div>
-                                <div class="preview-contact">${location} | ${phone} | ${email}</div>
-                            </div>
-                        </div>
-                        <div class="preview-section-title">خلاصه حرفه‌ای</div>
-                        <div class="preview-item">${summary}</div>
-                        <div class="preview-section-title">سوابق شغلی</div>
-                        ${jobs}
-                        <div class="preview-section-title">تحصیلات</div>
-                        ${education}
-                        <div class="preview-section-title">مهارت‌های تخصصی</div>
-                        ${skills}
-                        <div class="preview-section-title">تجهیزات و برندها</div>
-                        ${tools}
-                        ${additional ? `<div class="preview-section-title">اطلاعات تکمیلی</div>${additional}` : ''}
-                    </div>
-                `;
-            } else if (currentTemplate === 3) {
-                content = `
-                    <div class="template-3 template-preview">
-                        <div class="preview-header">
-                            <img class="preview-profile-img" src="${profileImg}" alt="پروفایل">
-                            <div class="preview-name">${name}</div>
-                            <div class="preview-title">${title}</div>
-                            <div class="preview-contact">${location} | ${phone} | ${email}</div>
-                        </div>
-                        <div class="preview-section-title">خلاصه حرفه‌ای</div>
-                        <div class="preview-item">${summary}</div>
-                        <div class="preview-section-title">سوابق شغلی</div>
-                        ${jobs}
-                        <div class="preview-section-title">تحصیلات</div>
-                        ${education}
-                        <div class="preview-section-title">مهارت‌های تخصصی</div>
-                        ${skills}
-                        <div class="preview-section-title">تجهیزات و برندها</div>
-                        ${tools}
-                        ${additional ? `<div class="preview-section-title">اطلاعات تکمیلی</div>${additional}` : ''}
-                    </div>
-                `;
-            } else if (currentTemplate === 4) {
-                content = `
-                    <div class="template-4 template-preview">
-                        <div class="preview-header">
-                            <img class="preview-profile-img" src="${profileImg}" alt="پروفایل">
-                            <div class="preview-name">${name}</div>
-                            <div class="preview-title">${title}</div>
-                            <div class="preview-contact">${location} | ${phone} | ${email}</div>
-                        </div>
-                        <div class="preview-section-title">خلاصه حرفه‌ای</div>
-                        <div class="preview-item">${summary}</div>
-                        <div class="preview-section-title">سوابق شغلی</div>
-                        ${jobs}
-                        <div class="preview-section-title">تحصیلات</div>
-                        ${education}
-                        <div class="preview-section-title">مهارت‌های تخصصی</div>
-                        ${skills}
-                        <div class="preview-section-title">تجهیزات و برندها</div>
-                        ${tools}
-                        ${additional ? `<div class="preview-section-title">اطلاعات تکمیلی</div>${additional}` : ''}
-                    </div>
-                `;
-            } else if (currentTemplate === 5) {
-                content = `
-                    <div class="template-5 template-preview">
-                        <div class="preview-header">
-                            <img class="preview-profile-img" src="${profileImg}" alt="پروفایل">
-                            <div class="preview-header-info">
-                                <div class="preview-name">${name}</div>
-                                <div class="preview-title">${title}</div>
-                                <div class="preview-contact">${location} | ${phone} | ${email}</div>
-                            </div>
-                        </div>
-                        <div class="preview-section-title">خلاصه حرفه‌ای</div>
-                        <div class="preview-item">${summary}</div>
-                        <div class="preview-section-title">سوابق شغلی</div>
-                        ${jobs}
-                        <div class="preview-section-title">تحصیلات</div>
-                        ${education}
-                        <div class="preview-section-title">مهارت‌های تخصصی</div>
-                        ${skills}
-                        <div class="preview-section-title">تجهیزات و برندها</div>
-                        ${tools}
-                        ${additional ? `<div class="preview-section-title">اطلاعات تکمیلی</div>${additional}` : ''}
-                    </div>
-                `;
-            }
-
-            previewBody.innerHTML = content;
-        }
-
-        function getJobsHTML() {
-            const container = document.getElementById('jobContainer');
-            let html = '';
-            container.querySelectorAll('.job-item').forEach(item => {
-                const title = item.querySelector('.job-title').textContent;
-                const company = item.querySelector('.job-company').textContent;
-                const date = item.querySelector('.job-date').textContent;
-                const bullets = Array.from(item.querySelectorAll('.bullet-list li')).map(li => `<li>${li.textContent}</li>`).join('');
-                html += `<div class="preview-item"><strong>${title}</strong><br>${company}<br><em>${date}</em><ul class="bullet-list">${bullets}</ul></div>`;
-            });
-            return html;
-        }
-
-        function getEducationHTML() {
-            const container = document.getElementById('educationContainer');
-            let html = '';
-            container.querySelectorAll('.education-item').forEach(item => {
-                const degree = item.querySelector('.job-title').textContent;
-                const university = item.querySelector('.job-company').textContent;
-                const extra = item.querySelector('.job-date').textContent;
-                html += `<div class="preview-item"><strong>${degree}</strong><br>${university}<br><em>${extra}</em></div>`;
-            });
-            return html;
-        }
-
-        function getSkillsHTML() {
-            const skills = document.querySelectorAll('#skillsContainer .skill-badge');
-            const skillTexts = Array.from(skills).map(s => s.textContent.replace('✕', '').trim()).join(' • ');
-            return `<div>${skillTexts}</div>`;
-        }
-
-        function getToolsHTML() {
-            const tools = document.querySelectorAll('#toolsContainer .tool-item');
-            const toolTexts = Array.from(tools).map(t => t.textContent.replace('✕', '').trim()).join(' • ');
-            return `<div>${toolTexts}</div>`;
-        }
-
-        function getAdditionalHTML() {
-            const boxes = document.querySelectorAll('#additionalContainer .info-box');
-            let html = '';
-            boxes.forEach(box => {
-                const label = box.querySelector('.info-box-label').textContent;
-                const value = box.querySelector('.info-box-value').textContent;
-                html += `<div class="preview-item"><strong>${label}:</strong> ${value}</div>`;
-            });
-            return html;
-        }
-
-        function downloadPDF() {
-            const element = document.getElementById('previewBody');
-            const name = document.getElementById('fullName').textContent;
-            
-            const opt = {
-                margin: 10,
-                filename: `resume-${name}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-            };
-
-            html2pdf().set(opt).from(element).save();
-        }
-
-        function downloadHTML() {
-            const name = document.getElementById('fullName').textContent;
-            const fullName = document.getElementById('fullName').textContent;
-            const jobTitle = document.getElementById('jobTitle').textContent;
-            const location = document.querySelectorAll('.editable-contact')[0].textContent;
-            const phone = document.querySelectorAll('.editable-contact')[1].textContent;
-            const email = document.querySelectorAll('.editable-contact')[2].textContent;
-            const summary = document.getElementById('summaryContainer').textContent;
-            const profileImg = document.getElementById('profileImage').src;
-            const jobs = getJobsHTML();
-            const education = getEducationHTML();
-            const skills = getSkillsHTML();
-            const tools = getToolsHTML();
-            const additional = getAdditionalHTML();
-
-            const htmlContent = `
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رزومه - ${name}</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; direction: rtl; }
-        .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; line-height: 1.8; }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #667eea; padding-bottom: 20px; }
-        .profile-img { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px; display: block; border: 3px solid #667eea; }
-        .name { font-size: 28px; font-weight: 700; color: #1e3c72; margin-bottom: 5px; }
-        .title { font-size: 16px; color: #666; margin-bottom: 10px; }
-        .contact { font-size: 12px; color: #999; }
-        .section-title { font-size: 18px; font-weight: 700; color: #1e3c72; margin-top: 20px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
-        .item { margin-bottom: 15px; }
-        .item-title { font-weight: 700; color: #1e3c72; }
-        .item-subtitle { color: #666; }
-        .item-date { color: #999; font-style: italic; }
-        .bullet-list { list-style: none; padding-right: 20px; }
-        .bullet-list li { color: #555; margin-bottom: 6px; padding-right: 15px; position: relative; }
-        .bullet-list li:before { content: "•"; color: #667eea; position: absolute; right: 0; }
-        @media print { body { padding: 0; } }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img class="profile-img" src="${profileImg}" alt="پروفایل">
-            <div class="name">${fullName}</div>
-            <div class="title">${jobTitle}</div>
-            <div class="contact">${location} | ${phone} | ${email}</div>
+<!-- Preview Modal -->
+<div class="preview-modal" id="previewModal">
+    <div class="preview-sheet">
+        <div class="preview-body" id="previewBody"></div>
+        <div style="padding:12px;text-align:center;border-top:1px solid #eee">
+            <button class="btn save" id="downloadPdfBtn" style="background:#4CAF50">دانلود PDF</button>
+            <button class="btn reset" id="closePreviewBtn" style="background:#f44336">بستن</button>
         </div>
-
-        <div class="section-title">خلاصه حرفه‌ای</div>
-        <div class="item">${summary}</div>
-
-        <div class="section-title">سوابق شغلی</div>
-        ${jobs}
-
-        <div class="section-title">تحصیلات</div>
-        ${education}
-
-        <div class="section-title">مهارت‌های تخصصی</div>
-        <div class="item">${skills}</div>
-
-        <div class="section-title">تجهیزات و برندها</div>
-        <div class="item">${tools}</div>
-
-        ${additional ? `<div class="section-title">اطلاعات تکمیلی</div>${additional}` : ''}
     </div>
-</body>
-</html>
-            `;
+</div>
 
-            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `resume-${name}.html`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+<script>
+    // Keep original HTML snapshot for reset
+    const originalHTML = document.getElementById('resumeContainer').innerHTML;
+
+    const editableSelector = '.editable';
+    const toggleBtn = document.getElementById('toggleEditBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const previewModal = document.getElementById('previewModal');
+    const previewBody = document.getElementById('previewBody');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const closePreviewBtn = document.getElementById('closePreviewBtn');
+    const imgInput = document.getElementById('imgInput');
+    const profileImg = document.getElementById('profileImg');
+
+    let editing = false;
+
+    function setEditing(mode){
+        editing = mode;
+        document.body.classList.toggle('editing', mode);
+        document.querySelectorAll(editableSelector).forEach(el=>{
+            el.contentEditable = mode;
+            if(mode){
+                el.setAttribute('aria-label','قابل ویرایش');
+            } else {
+                el.removeAttribute('aria-label');
+            }
+        });
+        toggleBtn.textContent = mode? 'خروج از ویرایش' : 'حالت ویرایش';
+        resetBtn.style.display = mode? 'inline-block' : 'none';
+    }
+
+    toggleBtn.addEventListener('click',()=>{
+        setEditing(!editing);
+        // Focus first editable element when enabling
+        if(!editing){ // we just enabled
+            setTimeout(()=>{
+                const first = document.querySelector(editableSelector);
+                if(first) first.focus();
+            },200);
         }
+    });
 
-        loadData();
-    </script>
+    // Save: download current HTML as file
+    saveBtn.addEventListener('click',()=>{
+        const doc = document.documentElement.cloneNode(true);
+        // Inline current resume container HTML into a minimal page
+        const content = `<!doctype html><html lang=\"fa\" dir=\"rtl\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>رزومه - ${document.getElementById('fullName').innerText}</title></head><body>${document.getElementById('resumeContainer').outerHTML}</body></html>`;
+        const blob = new Blob([content],{type:'text/html;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Rebuilt_Resume_${document.getElementById('fullName').innerText.replace(/\s+/g,'_')}.html`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    });
+
+    // Reset to original
+    resetBtn.addEventListener('click',()=>{
+        if(!confirm('آیا از بازنشانی به نسخهٔ اصلی مطمئن هستید؟ تمام تغییرات از بین می‌رود.')) return;
+        document.getElementById('resumeContainer').innerHTML = originalHTML;
+        // Re-bind events because we replaced DOM
+        location.reload();
+    });
+
+    // Preview modal
+    previewBtn.addEventListener('click',()=>{
+        previewBody.innerHTML = document.getElementById('resumeContainer').innerHTML;
+        previewModal.classList.add('active');
+    });
+    closePreviewBtn.addEventListener('click',()=>previewModal.classList.remove('active'));
+
+    // Download PDF using html2pdf
+    downloadPdfBtn.addEventListener('click',()=>{
+        const opt = {margin:0.5,filename:`Resume_${document.getElementById('fullName').innerText}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
+        html2pdf().set(opt).from(previewBody).save();
+    });
+
+    // Image upload preview
+    imgInput.addEventListener('change',e=>{
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev){
+            profileImg.src = ev.target.result;
+        }
+        reader.readAsDataURL(file);
+    });
+
+    // Allow Enter to insert line break rather than leave contenteditable
+    document.addEventListener('keydown',function(e){
+        if(e.key === 'Enter' && editing){
+            if(document.activeElement && document.activeElement.isContentEditable){
+                e.preventDefault();
+                document.execCommand('insertHTML', false, '\n');
+            }
+        }
+    });
+
+    // Accessibility: focus outlines for editable
+    document.addEventListener('focusin', (e)=>{
+        if(e.target && e.target.isContentEditable){
+            e.target.style.boxShadow = '0 0 0 3px rgba(102,126,234,0.15)';
+        }
+    });
+    document.addEventListener('focusout', (e)=>{
+        if(e.target && e.target.isContentEditable){
+            e.target.style.boxShadow = '';
+        }
+    });
+
+    // Initialize: ensure editing off
+    setEditing(false);
+</script>
 </body>
 </html>
